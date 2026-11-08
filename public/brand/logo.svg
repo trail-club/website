@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640.2 160">
+  <g id="logo-2" data-name="logo">
+    <polygon points="13.281 146.719 146.719 127.578 146.719 146.719 13.281 146.719" style="fill: #3d5a2a;"/>
+    <g>
+      <path d="M62.844,118.726l40.925-5.87c2.511-.36,4.839,1.384,5.199,3.895l.196,1.364c.36,2.511-1.384,4.839-3.895,5.199l-40.925,5.87c-2.511.36-4.839-1.384-5.199-3.895l-.196-1.364c-.36-2.511,1.384-4.839,3.895-5.199h0Z" style="fill: #3d5a2a;"/>
+      <path d="M73.375,130.673c.216,1.506-.83,2.903-2.336,3.12,0,0-2.903-.828-3.121-2.334,0,0,.827-2.904,2.333-3.122,0,0,2.904.826,3.123,2.332v.005ZM77.922,130.021c.576,4.017-2.212,7.741-6.229,8.319,0,0-7.742-2.209-8.321-6.225,0,0,2.205-7.743,6.221-8.324,0,0,7.744,2.202,8.327,6.218l.002.013Z" style="fill: #3d5a2a; fill-rule: evenodd;"/>
+      <path d="M102.477,126.499c.216,1.506-.83,2.903-2.336,3.12,0,0-2.903-.828-3.121-2.334,0,0,.827-2.904,2.333-3.122,0,0,2.904.826,3.123,2.332v.005ZM107.024,125.847c.576,4.017-2.212,7.741-6.229,8.319,0,0-7.742-2.209-8.321-6.225,0,0,2.205-7.743,6.221-8.324,0,0,7.744,2.202,8.327,6.218l.002.013Z" style="fill: #3d5a2a; fill-rule: evenodd;"/>
+      <polygon points="70.244 108.847 93.89 105.455 98.377 114.093 68.366 118.398 70.244 108.847" style="fill: #3d5a2a;"/>
+      <rect x="75.288" y="75.61" width="9.188" height="32.616" transform="translate(-12.242 12.274) rotate(-8.163)" style="fill: #3d5a2a;"/>
+      <rect x="74.487" y="63.428" width="4.594" height="13.781" transform="translate(-9.207 11.615) rotate(-8.163)" style="fill: #3d5a2a;"/>
+      <path d="M83.124,59.199c.248,1.732-.954,3.338-2.686,3.587,0,0-3.339-.952-3.589-2.685,0,0,.951-3.339,2.683-3.59,0,0,3.339.95,3.591,2.681v.005ZM94.311,57.595c.216,1.506-.83,2.903-2.336,3.12,0,0-2.903-.828-3.121-2.334,0,0,.827-2.904,2.333-3.122,0,0,2.904.826,3.123,2.332v.005ZM61.843,62.252c.216,1.506-.83,2.903-2.336,3.12,0,0-2.903-.828-3.121-2.334,0,0,.827-2.904,2.333-3.122,0,0,2.904.826,3.123,2.332v.005ZM56.909,55.999l34.923-5.009c3.164-.454,6.097,1.743,6.551,4.908l.313,2.183c.454,3.164-1.743,6.097-4.908,6.551l-34.923,5.009c-3.164.454-6.097-1.743-6.551-4.908l-.313-2.183c-.454-3.164,1.743-6.097,4.908-6.551h0Z" style="fill: #3d5a2a; fill-rule: evenodd;"/>
+      <circle cx="79.987" cy="59.649" r="1.709" style="fill: #d4602a;"/>
+      <path d="M73.347,81.949l10.004-1.435c1.507-.216,2.904.83,3.12,2.337l.196,1.364c.216,1.507-.83,2.904-2.337,3.12l-10.004,1.435c-1.507.216-2.904-.83-3.12-2.337l-.196-1.364c-.216-1.507.83-2.904,2.337-3.12h0Z" style="fill: #3d5a2a;"/>
+      <line x1="68.347" y1="85.915" x2="52.365" y2="84.495" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 8.728px;"/>
+      <line x1="45.156" y1="89.242" x2="48.608" y2="103.597" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 8.728px;"/>
+      <line x1="44.389" y1="109.771" x2="54.392" y2="108.336" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3.675px;"/>
+      <line x1="44.843" y1="109.706" x2="45.952" y2="117.436" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.986px;"/>
+      <line x1="53.938" y1="108.401" x2="55.047" y2="116.132" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.986px;"/>
+      <line x1="89.264" y1="82.915" x2="104.203" y2="77.059" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 8.728px;"/>
+      <line x1="111.607" y1="73.677" x2="110.493" y2="56.202" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 8.728px;"/>
+      <line x1="104.708" y1="51.463" x2="114.712" y2="50.028" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3.675px;"/>
+      <line x1="105.163" y1="51.397" x2="104.054" y2="43.667" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.986px;"/>
+      <line x1="114.257" y1="50.093" x2="113.148" y2="42.363" style="fill: none; stroke: #3d5a2a; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.986px;"/>
+      <circle cx="108.797" cy="44.379" r="3.675" style="fill: #d4602a;"/>
+    </g>
+    <rect x="161.2" y="60.4" width="56" height="16.8" style="fill: #3d5a2a;"/>
+    <rect x="180.8" y="60.4" width="16.8" height="70" style="fill: #3d5a2a;"/>
+    <rect x="221.4" y="60.4" width="16.8" height="70" style="fill: #3d5a2a;"/>
+    <path d="M238.2,75.8h16.8c2.706,0,4.9,2.194,4.9,4.9,0,0-2.194,4.9-4.9,4.9h-16.8v-9.8ZM221.4,60.4h33.6c11.211,0,20.3,9.089,20.3,20.3,0,0-9.089,20.3-20.3,20.3h-33.6v-40.6Z" style="fill: #3d5a2a; fill-rule: evenodd;"/>
+    <polygon points="242.4 96.8 260.6 96.8 280.2 130.4 261.3 130.4 242.4 96.8" style="fill: #3d5a2a;"/>
+    <polygon points="281.6 130.4 302.6 60.4 322.2 60.4 343.2 130.4 325.7 130.4 312.4 86.09 299.1 130.4 281.6 130.4" style="fill: #3d5a2a;"/>
+    <polygon points="308.34 99.6 316.46 99.6 322.34 119.2 302.46 119.2 308.34 99.6" style="fill: #d4602a;"/>
+    <rect x="348.8" y="60.4" width="16.8" height="70" style="fill: #3d5a2a;"/>
+    <rect x="374" y="60.4" width="16.8" height="70" style="fill: #3d5a2a;"/>
+    <rect x="374" y="113.6" width="43.4" height="16.8" style="fill: #3d5a2a;"/>
+    <circle cx="437" cy="108.7" r="8.4" style="fill: #d4602a;"/>
+    <path d="M495.646,93.711c-6.205-6.892-16.016-9.247-24.674-5.924,0,0-14.373,11.638-14.373,20.912,0,0,5.715,17.589,14.373,20.912,0,0,18.468.968,24.674-5.924l-13.36-8.808c-2.945,1.566-6.586.836-8.701-1.744,0,0-2.114-6.294,0-8.874,0,0,5.755-3.31,8.701-1.744l13.36-8.808Z" style="fill: #3d5a2a;"/>
+    <rect x="507" y="60.4" width="15.4" height="70" style="fill: #3d5a2a;"/>
+    <rect x="530.8" y="87" width="15.4" height="21.7" style="fill: #3d5a2a;"/>
+    <path d="M538.5,108.7c0,8.119,6.581,14.7,14.7,14.7,0,0,14.7-6.581,14.7-14.7" style="fill: none; stroke: #3d5a2a; stroke-linejoin: round; stroke-width: 15.4px;"/>
+    <rect x="560.2" y="87" width="15.4" height="43.4" style="fill: #3d5a2a;"/>
+    <rect x="584" y="60.4" width="15.4" height="70" style="fill: #3d5a2a;"/>
+    <path d="M622.5,108.7c0,8.116-6.578,14.696-14.694,14.7,0,0-14.699-6.571-14.706-14.687,0,0,6.565-14.702,14.681-14.713,0,0,14.705,6.558,14.719,14.674" style="fill: none; stroke: #3d5a2a; stroke-linejoin: round; stroke-width: 15.4px;"/>
+  </g>
+</svg>

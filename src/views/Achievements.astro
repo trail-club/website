@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { getAchievements } from "../lib/content";
+import { pick, t, type Lang } from "../lib/i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const items = await getAchievements();
+---
+
+<Base lang={lang} title={t(lang, "ach.title")}>
+  <div class="container page">
+    <h1>{t(lang, "ach.title")}</h1>
+    {
+      items.length === 0 && (
+        <Placeholder req="achievements" />
+      )
+    }
+    {
+      items.length > 0 && (
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>{t(lang, "ach.year")}</th><th>{t(lang, "ach.event")}</th><th>{t(lang, "ach.league")}</th><th>{t(lang, "ach.result")}</th></tr>
+            </thead>
+            <tbody>
+              {items.map((a) => (
+                <tr>
+                  <td class="num">{a.data.year}</td>
+                  <td>{a.data.url ? <a href={a.data.url}>{pick(lang, a.data, "event")}</a> : pick(lang, a.data, "event")}</td>
+                  <td>{a.data.league}</td>
+                  <td>{pick(lang, a.data, "result")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .num { font-variant-numeric: tabular-nums; }
+</style>

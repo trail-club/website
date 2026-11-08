@@ -1,0 +1,18 @@
+# S-W2: publications from the last 5 years, with download links.
+# Put PDFs in public/papers/ and set `pdf: /papers/<file>.pdf`.
+# `scripts/check-content.mjs` fails if a listed PDF file does not exist.
+#
+# - id: trail-tdp-2027
+#   title: "TRAIL@Home 2027 Team Description Paper"
+#   authors: ["First Author", "Second Author"]
+#   venue: "RoboCup@Home 2027"
+#   year: 2026
+#   type: tdp
+#   pdf: /papers/trail-tdp-2027.pdf
+#   bibtex: |
+#     @misc{trail2027tdp,
+#       title  = {TRAIL@Home 2027 Team Description Paper},
+#       author = {First Author and Second Author},
+#       year   = {2026}
+#     }
+[]

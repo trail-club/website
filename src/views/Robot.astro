@@ -1,0 +1,32 @@
+---
+import { render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Figure from "../components/Figure.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { getPage, getSite } from "../lib/content";
+import { t, type Lang } from "../lib/i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const site = await getSite();
+const page = await getPage(lang, "robot");
+const Content = page ? (await render(page.entry)).Content : undefined;
+---
+
+<Base lang={lang} title={page?.entry.data.title ?? site.robot_name} description={page?.entry.data.description}>
+  <div class="container page">
+    {page?.fallback && <p class="notice">{t(lang, "doc.fallback")}</p>}
+    {page?.entry.data.draft && <p class="notice">{t(lang, "doc.draft")}</p>}
+    <h1>{page?.entry.data.title ?? site.robot_name}</h1>
+    {page?.entry.data.description && <p class="lead">{page.entry.data.description}</p>}
+    <div class="robot-photo">
+      {site.robot_photo ? <Figure src={site.robot_photo} alt={site.robot_name} /> : <Placeholder req="robotPhoto" variant="media" />}
+    </div>
+    {Content && <div class="prose"><Content /></div>}
+  </div>
+</Base>
+
+<style>
+  .robot-photo { margin: var(--space-6) 0 var(--space-8); max-width: 860px; }
+  .robot-photo :global(img) { border: 1px solid var(--border); }
+</style>

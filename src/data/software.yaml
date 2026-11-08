@@ -1,0 +1,12 @@
+# S-W3: software repositories other teams can reuse.
+# S-W4 subtracts points for inactive repositories presented as active,
+# so keep `status` honest: active | maintenance | archived.
+- id: aharobot
+  name: AhaRobot
+  repo: https://github.com/trail-club/AhaRobot
+  description: ROS 2 Jazzy software stack for the AhaRobot (simulation, navigation, manipulation, perception, speech and task execution).
+  description_ja: AhaRobot 用の ROS 2 Jazzy ソフトウェア一式（シミュレーション、ナビゲーション、マニピュレーション、認識、音声、タスク実行）。
+  license: Apache-2.0 (aha_* packages)   # TODO: add a LICENSE file to the repository root
+  docs: https://github.com/trail-club/AhaRobot#readme
+  status: active
+  tags: [ROS 2, Gazebo, Nav2, MoveIt 2]

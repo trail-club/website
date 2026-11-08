@@ -1,0 +1,13 @@
+# Photos (path under public/) and videos (YouTube id).
+- id: sim-rcjo2026
+  kind: photo
+  src: /images/sobits-rcjo2026.png
+  caption: AhaRobot in the RoboCup Japan Open 2026 simulation world
+  caption_ja: RoboCup Japan Open 2026 のシミュレーション環境での AhaRobot
+  year: 2026
+- id: task-gui
+  kind: photo
+  src: /images/aha-tasks-web-gui.png
+  caption: Web GUI for monitoring task execution
+  caption_ja: タスク実行を監視する Web GUI
+  year: 2026

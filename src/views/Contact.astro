@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { displayName, getMembers, getSite, membersWithRole } from "../lib/content";
+import { pick, t, type Lang } from "../lib/i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const site = await getSite();
+const contacts = membersWithRole(await getMembers(), "contact");
+const affiliation = pick(lang, site, "affiliation");
+const links = [
+  ["GitHub", site.github],
+  ["YouTube", site.youtube],
+  ["X", site.x],
+  ["Instagram", site.instagram],
+].filter((l): l is [string, string] => Boolean(l[1]));
+---
+
+<Base lang={lang} title={t(lang, "contact.title")}>
+  <div class="container page">
+    <h1>{t(lang, "contact.title")}</h1>
+    {contacts.length === 0 && <Placeholder req="contact" variant="inline" />}
+    {!site.contact_email && <Placeholder req="contactEmail" variant="inline" />}
+    {!affiliation && <Placeholder req="affiliation" variant="inline" />}
+    <dl class="info">
+      {contacts.length > 0 && (
+        <div><dt>{t(lang, "team.contact")}</dt><dd>{contacts.map((m) => displayName(lang, m)).join(", ")}</dd></div>
+      )}
+      {site.contact_email && (
+        <div><dt>{t(lang, "contact.email")}</dt><dd><a href={`mailto:${site.contact_email}`}>{site.contact_email}</a></dd></div>
+      )}
+      {affiliation && (
+        <div><dt>{t(lang, "contact.affiliation")}</dt><dd>{site.affiliation_url ? <a href={site.affiliation_url}>{affiliation}</a> : affiliation}</dd></div>
+      )}
+      {links.map(([label, href]) => (
+        <div><dt>{label}</dt><dd><a href={href}>{href}</a></dd></div>
+      ))}
+    </dl>
+  </div>
+</Base>
+
+<style>
+  .info { display: grid; gap: var(--space-4); max-width: var(--prose-width); }
+  .info > div { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: var(--space-4); border-bottom: 1px solid var(--border); padding-bottom: var(--space-3); }
+  dt { color: var(--text-muted); font-weight: 600; font-size: var(--fs-sm); }
+  dd { margin: 0; }
+  @media (max-width: 520px) { .info > div { grid-template-columns: minmax(0, 1fr); gap: 0; } }
+</style>

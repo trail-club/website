@@ -1,0 +1,72 @@
+---
+import Base from "../layouts/Base.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { getPublications } from "../lib/content";
+import { t, type Lang } from "../lib/i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const pubs = await getPublications();
+const years = [...new Set(pubs.map((p) => p.data.year))];
+---
+
+<Base lang={lang} title={t(lang, "pubs.title")}>
+  <div class="container page">
+    <h1>{t(lang, "pubs.title")}</h1>
+    <p class="lead">{t(lang, "pubs.intro")}</p>
+    {
+      !pubs.some((p) => p.data.type === "tdp") && (
+        <Placeholder req="tdp" />
+      )
+    }
+    {
+      !pubs.some((p) => p.data.type !== "tdp") && (
+        <Placeholder req="publications" />
+      )
+    }
+    {
+      years.map((y) => (
+        <section>
+          <h2>{y}</h2>
+          <ol class="pubs">
+            {pubs
+              .filter((p) => p.data.year === y)
+              .map((p) => (
+                <li id={p.id}>
+                  <div class="title">{p.data.title}</div>
+                  <div class="muted">{p.data.authors.join(", ")}</div>
+                  <div>
+                    <em>{p.data.venue}</em>
+                    {p.data.type === "tdp" && <span class="badge muted">{t(lang, "pubs.type.tdp")}</span>}
+                  </div>
+                  <div class="actions">
+                    {p.data.pdf && <a href={p.data.pdf} download>{t(lang, "pubs.pdf")}</a>}
+                    {p.data.doi && <a href={`https://doi.org/${p.data.doi}`}>{t(lang, "pubs.doi")}</a>}
+                    {p.data.url && <a href={p.data.url}>{t(lang, "pubs.link")}</a>}
+                  </div>
+                  {p.data.bibtex && (
+                    <details>
+                      <summary>{t(lang, "pubs.bibtex")}</summary>
+                      <pre>{p.data.bibtex.trim()}</pre>
+                    </details>
+                  )}
+                </li>
+              ))}
+          </ol>
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  :global(.ph) { margin-bottom: var(--space-4); }
+  .pubs { list-style: none; padding: 0; margin: 0; }
+  .pubs li { padding: var(--space-4) 0; border-bottom: 1px solid var(--border); }
+  .title { font-weight: 600; }
+  .badge { margin-left: var(--space-2); }
+  .actions { display: flex; gap: var(--space-4); margin-top: var(--space-1); font-size: var(--fs-sm); }
+  .actions a { display: inline-flex; align-items: center; min-height: 32px; }
+  details { margin-top: var(--space-2); font-size: var(--fs-sm); }
+  summary { cursor: pointer; color: var(--accent); }
+</style>

@@ -1,0 +1,66 @@
+---
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import Figure from "../components/Figure.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { showPlaceholders, youtubeEmbed } from "../lib/content";
+import { pick, t, type Lang } from "../lib/i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const all = await getCollection("media");
+const videos = all.filter((m) => m.data.kind === "video");
+const photos = all.filter((m) => m.data.kind === "photo");
+---
+
+<Base lang={lang} title={t(lang, "media.title")}>
+  <div class="container page">
+    <h1>{t(lang, "media.title")}</h1>
+    {
+      videos.length === 0 && showPlaceholders && (
+        <section>
+          <h2>{t(lang, "media.videos")}</h2>
+          <div class="media-grid">
+            <Placeholder req="robotVideo" variant="media" />
+          </div>
+        </section>
+      )
+    }
+    {
+      videos.length > 0 && (
+        <section>
+          <h2>{t(lang, "media.videos")}</h2>
+          <div class="media-grid">
+            {videos.map((v) => (
+              <figure>
+                <div class="video">
+                  <iframe src={youtubeEmbed(v.data.src)} title={pick(lang, v.data, "caption")} loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen />
+                </div>
+                <figcaption class="muted">{pick(lang, v.data, "caption")}{v.data.year && ` (${v.data.year})`}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )
+    }
+    {
+      photos.length > 0 && (
+        <section>
+          <h2>{t(lang, "media.photos")}</h2>
+          <div class="media-grid">
+            {photos.map((p) => (
+              <Figure crop link lazy src={p.data.src} alt={pick(lang, p.data, "caption") ?? ""} caption={pick(lang, p.data, "caption")} year={p.data.year} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .media-grid { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+  /* video tiles; photo tiles use <Figure> */
+  figure { margin: 0; }
+  figcaption { font-size: var(--fs-sm); margin-top: var(--space-2); }
+</style>

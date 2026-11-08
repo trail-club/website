@@ -1,0 +1,80 @@
+---
+/**
+ * A visible "what goes here" box for content that is not filled in yet.
+ * Shown only while placeholders are enabled (npm run dev, or SHOW_PLACEHOLDERS=true);
+ * it disappears automatically once the data is filled in.
+ * Never shown on the published site: reviewers mark placeholder sites down (S-W1).
+ */
+import { showPlaceholders } from "../lib/content";
+import { REQUIREMENTS } from "../lib/requirements.mjs";
+
+interface Props {
+  /** A requirement id from src/lib/requirements.mjs; fills label / note / edit / criterion */
+  req?: keyof typeof REQUIREMENTS;
+  /** What goes here (Japanese, for team members); overrides the requirement's label */
+  label?: string;
+  /** Where to edit, e.g. "src/data/site.yaml → team_photo" */
+  edit?: string;
+  /** Extra notes, e.g. requirements (not shown in the inline variant) */
+  note?: string;
+  /** Review criterion, e.g. "H-G1 合否" */
+  criterion?: string;
+  /** media: 16:9 box; inline: one line; chip: tiny tag (details in the tooltip) */
+  variant?: "box" | "media" | "inline" | "chip";
+}
+
+const { req, variant = "box" } = Astro.props;
+const base = req ? REQUIREMENTS[req] : undefined;
+const label = Astro.props.label ?? base?.label ?? "";
+const edit = Astro.props.edit ?? base?.edit ?? "";
+const note = variant === "inline" ? undefined : (Astro.props.note ?? base?.note);
+const criterion = Astro.props.criterion ?? base?.criterion;
+---
+
+{
+  showPlaceholders && variant === "chip" && (
+    <span class="ph ph-chip" role="note" title={`${label}${note ? " — " + note : ""}\n編集: ${edit}`}>
+      <span class="ph-tag">未入力</span>
+      {label}
+    </span>
+  )
+}
+{
+  showPlaceholders && variant !== "chip" && (
+    <div class:list={["ph", `ph-${variant}`]} role="note">
+      <div class="ph-head">
+        <span class="ph-tag">未入力</span>
+        {criterion && <span class="ph-crit">審査 {criterion}</span>}
+      </div>
+      <div class="ph-label">{label}</div>
+      {note && <div class="ph-note">{note}</div>}
+      <code class="ph-edit">{edit}</code>
+    </div>
+  )
+}
+
+<style>
+  .ph {
+    border: 2px dashed var(--ph-border);
+    background: var(--ph-bg);
+    color: var(--ph-text);
+    border-radius: var(--radius);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+  .ph-media { aspect-ratio: 16 / 9; justify-content: center; align-items: center; text-align: center; }
+  .ph-inline { display: inline-flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); margin: var(--space-2) 0; }
+  .ph-chip { display: inline-flex; flex-direction: row; align-items: center; gap: var(--space-1); padding: 0.1em 0.5em; border-width: 1.5px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; cursor: help; }
+  .ph-head { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .ph-tag, .ph-crit { font-size: 0.7rem; font-weight: 700; border-radius: 999px; padding: 0.05em 0.6em; }
+  .ph-tag { background: var(--ph-border); color: var(--ph-bg); }
+  .ph-crit { border: 1px solid var(--ph-border); }
+  .ph-label { font-weight: 700; font-size: var(--fs-base); }
+  .ph-inline .ph-label { font-size: var(--fs-sm); }
+  .ph-note { opacity: 0.85; }
+  .ph-edit { background: transparent; padding: 0; font-size: 0.75rem; opacity: 0.85; }
+</style>

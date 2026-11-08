@@ -1,0 +1,9 @@
+---
+import DocPage from "../../../views/DocPage.astro";
+import { docPaths } from "../../../lib/routes";
+
+export const getStaticPaths = () => docPaths("ja", "research");
+const { slug, entry, fallback } = Astro.props;
+---
+
+<DocPage lang="ja" section="research" slug={slug} entry={entry} fallback={fallback} />

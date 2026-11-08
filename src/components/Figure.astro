@@ -1,0 +1,29 @@
+---
+/** A photo with an optional caption and year, e.g. "Team photo (2026)". */
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  year?: number;
+  /** crop to 16:9 with a border (hero and gallery), or show the whole image */
+  crop?: boolean;
+  /** link the image to its full-size file */
+  link?: boolean;
+  lazy?: boolean;
+  class?: string;
+}
+const { src, alt, caption, year, crop = false, link = false, lazy = false, class: className } = Astro.props;
+const img = { src, alt, width: 1280, height: 720, loading: lazy ? ("lazy" as const) : undefined };
+---
+
+<figure class:list={["fig", { crop }, className]}>
+  {link ? <a href={src}><img {...img} /></a> : <img {...img} />}
+  {caption && <figcaption class="muted">{caption}{year && ` (${year})`}</figcaption>}
+</figure>
+
+<style>
+  .fig { margin: 0; }
+  .fig img { border-radius: var(--radius); width: 100%; }
+  .fig.crop img { border: 1px solid var(--border); aspect-ratio: 16 / 9; object-fit: cover; }
+  .fig figcaption { font-size: var(--fs-sm); margin-top: var(--space-2); }
+</style>

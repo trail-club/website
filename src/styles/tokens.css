@@ -1,0 +1,67 @@
+/* Design tokens. Change colors, fonts and spacing here only.
+   When the team logo / colors are decided, update --accent and friends. */
+:root {
+  /* TRAIL Club palette: moss green + trail orange on a warm paper color */
+  --bg: #FAF8F1;
+  --bg-subtle: #F2EFE2;
+  --surface: #FFFFFF;
+  --text: #1F2A18;
+  --text-muted: #55604B;
+  --border: #E2DDCB;
+  --accent: #3D5A2A;
+  --accent-text: #FFFFFF;
+  --accent-subtle: #E6ECDC;
+  --accent-2: #D4602A;          /* orange: small highlights only, not for body text */
+  --ok: #2F7A3A;
+  --warn: #9A5A00;
+  --muted-badge: #6B7263;
+  /* "not filled in yet" boxes are blue on purpose, so they never look like part of the design */
+  --ph-bg: #EEF3FF;
+  --ph-border: #3B6FD8;
+  --ph-text: #1E3F8A;
+
+  --font-sans: "Inter", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: clamp(2rem, 5vw, 3rem);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius: 10px;
+  --content-width: 1080px;
+  --prose-width: 72ch;
+  --gutter: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171F12;
+    --bg-subtle: #1E2918;
+    --surface: #1E2918;
+    --text: #ECEADF;
+    --text-muted: #AAB29E;
+    --border: #33402B;
+    --accent: #A8C98A;
+    --accent-text: #171F12;
+    --accent-subtle: #26341E;
+    --accent-2: #E9874F;
+    --ok: #7CCB8A;
+    --warn: #E2B354;
+    --muted-badge: #9AA28F;
+    --ph-bg: #1A2440;
+    --ph-border: #7EA2FF;
+    --ph-text: #C9D6FF;
+  }
+}

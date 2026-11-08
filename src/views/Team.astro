@@ -1,0 +1,119 @@
+---
+import Base from "../layouts/Base.astro";
+import Figure from "../components/Figure.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { displayName, getMembers, getSite, membersWithRole, showPlaceholders } from "../lib/content";
+import { pick, t, type Lang, type UiKey } from "../lib/i18n";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const site = await getSite();
+const members = await getMembers();
+
+const withRole = (r: Parameters<typeof membersWithRole>[1]) => membersWithRole(members, r);
+const key = [
+  { role: "pi", label: "team.pi" },
+  { role: "leader", label: "team.leader" },
+  { role: "contact", label: "team.contact" },
+] as const satisfies readonly { role: string; label: UiKey }[];
+const current = members.filter((m) => !m.data.roles.includes("alumni"));
+const alumni = withRole("alumni");
+const affiliation = pick(lang, site, "affiliation");
+const name = (m: (typeof members)[number]) => displayName(lang, m);
+---
+
+<Base lang={lang} title={t(lang, "team.title")}>
+  <div class="container page">
+    <h1>{t(lang, "team.title")}</h1>
+    {affiliation && <p class="lead">{affiliation}</p>}
+    {!affiliation && <Placeholder req="affiliation" variant="inline" />}
+
+    <div class="team-photo">
+      {
+        site.team_photo ? (
+          <Figure src={site.team_photo} alt={t(lang, "home.teamPhoto")} caption={pick(lang, site, "team_photo_caption")} year={site.team_photo_year} />
+        ) : (
+          <Placeholder req="teamPhoto" variant="media" />
+        )
+      }
+    </div>
+
+    {
+      (showPlaceholders || key.some((k) => withRole(k.role).length > 0)) && (
+        <dl class="roles">
+          {key.map((k) =>
+            withRole(k.role).length > 0 ? (
+              <div>
+                <dt>{t(lang, k.label)}</dt>
+                {withRole(k.role).map((m) => (
+                  <dd>
+                    {m.data.url ? <a href={m.data.url}>{name(m)}</a> : name(m)}
+                    {m.data.affiliation && <span class="muted"> — {m.data.affiliation}</span>}
+                  </dd>
+                ))}
+              </div>
+            ) : showPlaceholders ? (
+              <Placeholder req={k.role} />
+            ) : null,
+          )}
+        </dl>
+      )
+    }
+
+    {
+      current.length > 0 && (
+        <section>
+          <h2>{t(lang, "team.members")}</h2>
+          <ul class="members">
+            {current.map((m) => (
+              <li class="member">
+                {m.data.photo ? (
+                  <img src={m.data.photo} alt="" width="96" height="96" loading="lazy" />
+                ) : (
+                  <span class="initials" aria-hidden="true">{m.data.name.split(/\s+/).map((s) => s[0]).join("").slice(0, 2)}</span>
+                )}
+                <div>
+                  <div class="name">{m.data.url ? <a href={m.data.url}>{name(m)}</a> : name(m)}</div>
+                  {pick(lang, m.data, "position") && <div class="muted small">{pick(lang, m.data, "position")}</div>}
+                  {m.data.squad && <div class="small">{t(lang, `squad.${m.data.squad}` as UiKey)}</div>}
+                  {m.data.github && <a class="small" href={`https://github.com/${m.data.github}`}>@{m.data.github}</a>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      current.length === 0 && showPlaceholders && (
+        <section>
+          <h2>{t(lang, "team.members")}</h2>
+          <Placeholder req="members" />
+        </section>
+      )
+    }
+
+    {
+      alumni.length > 0 && (
+        <section>
+          <h2>{t(lang, "team.alumni")}</h2>
+          <p>{alumni.map(name).join(", ")}</p>
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .team-photo { margin: var(--space-8) 0; }
+  .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--space-4); margin: var(--space-8) 0 0; }
+  .roles > div { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-4); }
+  .roles dt { font-size: var(--fs-sm); color: var(--text-muted); font-weight: 600; }
+  .roles dd { margin: var(--space-1) 0 0; font-weight: 600; }
+  .members { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+  .member { display: flex; gap: var(--space-4); align-items: center; border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-4); }
+  .member img, .initials { width: 56px; height: 56px; border-radius: 50%; flex: none; object-fit: cover; }
+  .initials { display: grid; place-items: center; background: var(--accent-subtle); color: var(--accent); font-weight: 700; }
+  .name { font-weight: 600; }
+</style>

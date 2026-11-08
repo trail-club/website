@@ -1,0 +1,71 @@
+---
+import { getCollection } from "astro:content";
+import Docs from "../layouts/Docs.astro";
+import DocBody from "../components/DocBody.astro";
+import { listDocs } from "../lib/content";
+import { localePath, pick, t, type Lang } from "../lib/i18n";
+
+interface Props { lang: Lang; section: "research" | "software" }
+const { lang, section } = Astro.props;
+const docs = await listDocs(lang, section);
+const intro = docs.find((d) => d.slug === "index");
+const pages = docs.filter((d) => d.slug !== "index");
+const repos = section === "software" ? await getCollection("software") : [];
+const statusClass = { active: "ok", maintenance: "warn", archived: "muted" } as const;
+const title = t(lang, section === "research" ? "research.title" : "sw.title");
+---
+
+<Docs lang={lang} section={section} title={intro?.entry.data.title ?? title} active="">
+  {intro ? <DocBody lang={lang} entry={intro.entry} fallback={intro.fallback} /> : <h1>{title}</h1>}
+  {section === "software" && !intro && <p class="lead">{t(lang, "sw.intro")}</p>}
+
+  {
+    repos.length > 0 && (
+      <section>
+        <h2>{t(lang, "sw.repos")}</h2>
+        <ul class="repos">
+          {repos.map((r) => (
+            <li class="card">
+              <div class="repo-head">
+                <h3><a href={r.data.repo}>{r.data.name}</a></h3>
+                <span class={`badge ${statusClass[r.data.status]}`}>{t(lang, `sw.status.${r.data.status}`)}</span>
+              </div>
+              <p>{pick(lang, r.data, "description")}</p>
+              <p class="meta">
+                <span>{t(lang, "sw.license")}: {r.data.license}</span>
+                {r.data.docs && <a href={r.data.docs}>{t(lang, "sw.docs")}</a>}
+              </p>
+              {r.data.tags.length > 0 && <p class="tags">{r.data.tags.map((tag) => <span>{tag}</span>)}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    pages.length > 0 && (
+      <section>
+        <h2>{section === "software" ? t(lang, "sw.packages") : t(lang, "home.explore")}</h2>
+        <div class="grid">
+          {pages.map((d) => (
+            <a class="card" href={localePath(lang, `/${section}/${d.slug}`)}>
+              <h3>{d.entry.data.title}</h3>
+              {d.entry.data.description && <p>{d.entry.data.description}</p>}
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</Docs>
+
+<style>
+  .repos { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+  .repo-head { display: flex; gap: var(--space-3); align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .repo-head h3 { margin: 0; }
+  .repos p { margin-top: var(--space-2); }
+  .meta { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .tags span { background: var(--bg-subtle); border-radius: 4px; padding: 0 var(--space-2); font-size: 0.75rem; }
+</style>

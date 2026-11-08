@@ -1,0 +1,145 @@
+---
+import "../styles/global.css";
+import NavList from "../components/NavList.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { getSite, showPlaceholders } from "../lib/content";
+import { localePath, pick, stripLang, t, type Lang } from "../lib/i18n";
+import { missingFields } from "../lib/requirements.mjs";
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { lang, title, description, image } = Astro.props;
+const site = await getSite();
+const fullTitle = title ? `${title} | ${site.team_name}` : `${site.team_name} — ${site.league}`;
+const desc = description ?? pick(lang, site, "tagline") ?? `${site.team_name}: ${site.league}`;
+const rest = stripLang(Astro.url.pathname);
+const otherLang: Lang = lang === "en" ? "ja" : "en";
+const current = rest.replace(/\/$/, "") || "/";
+const ogImage = new URL(image ?? site.og_image ?? site.team_photo ?? site.robot_photo ?? "/images/sobits-rcjo2026.png", Astro.site);
+const favicon = site.favicon ?? "/brand/favicon.svg";
+// Brand assets still missing (listed in the footer while placeholders are on)
+const missingBrand = missingFields("brand", site).map((f) => f.ja ?? f.key);
+const year = new Date().getFullYear();
+const links = [
+  ["GitHub", site.github],
+  ["YouTube", site.youtube],
+  ["X", site.x],
+  ["Instagram", site.instagram],
+].filter((l): l is [string, string] => Boolean(l[1]));
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(localePath("en", rest), Astro.site)} />
+    <link rel="alternate" hreflang="ja" href={new URL(localePath("ja", rest), Astro.site)} />
+    <link rel="icon" href={favicon} type={favicon.endsWith(".svg") ? "image/svg+xml" : undefined} />
+    {site.apple_touch_icon && <link rel="apple-touch-icon" href={site.apple_touch_icon} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body data-placeholders={showPlaceholders ? "" : undefined}>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container bar">
+        <a class="brand" href={localePath(lang, "/")}>
+          {
+            site.logo ? (
+              <picture>
+                {site.logo_dark && <source srcset={site.logo_dark} media="(prefers-color-scheme: dark)" />}
+                <img class="brand-logo" src={site.logo} alt={site.team_name} height="40" />
+              </picture>
+            ) : (
+              <span class="brand-name">{site.team_name}</span>
+            )
+          }
+          <span class="brand-sub">@Home OPL</span>
+        </a>
+        {!site.logo && <Placeholder req="logo" variant="chip" />}
+        <nav class="nav-desktop" aria-label="Main">
+          <NavList lang={lang} current={current} />
+        </nav>
+        <details class="menu">
+          <summary>{t(lang, "nav.menu")}</summary>
+          <nav aria-label="Main (mobile)">
+            <NavList lang={lang} current={current} />
+          </nav>
+        </details>
+        <a class="lang" href={localePath(otherLang, rest)} hreflang={otherLang} lang={otherLang}>{t(lang, "lang.switch")}</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container foot">
+        <div>
+          <strong>{site.team_name}</strong> · {site.league}
+          {pick(lang, site, "affiliation") && <div class="muted">{pick(lang, site, "affiliation")}</div>}
+        </div>
+        <ul class="links">
+          {site.contact_email && <li><a href={`mailto:${site.contact_email}`}>{site.contact_email}</a></li>}
+          {links.map(([label, href]) => <li><a href={href}>{label}</a></li>)}
+        </ul>
+        {missingBrand.length > 0 && <Placeholder req="brand" note={missingBrand.join(" / ")} />}
+        <div class="muted copyright">© {year} {site.team_name}. {t(lang, "footer.rights")}</div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip { position: absolute; left: -9999px; }
+  .skip:focus { left: var(--gutter); top: var(--space-2); background: var(--bg); padding: var(--space-2); z-index: 10; }
+
+  .site-header { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 5; }
+  .bar { display: flex; align-items: center; gap: var(--space-2); min-height: 60px; }
+  .brand { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; color: var(--text); margin-right: auto; }
+  .brand-name { font-weight: 800; font-size: var(--fs-lg); letter-spacing: 0.04em; }
+  .brand-logo { height: 40px; width: auto; display: block; }
+  .brand-sub { font-size: var(--fs-sm); color: var(--text-muted); }
+  .brand-name, .brand-sub, .menu summary, .lang { white-space: nowrap; }
+
+  /* NavList renders the <ul>; style it from here */
+  .site-header :global(ul) { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-1); margin: 0; padding: 0; }
+  .site-header :global(nav a) { display: block; padding: var(--space-2); color: var(--text); text-decoration: none; font-size: var(--fs-sm); border-radius: 6px; }
+  .site-header :global(nav a:hover) { background: var(--bg-subtle); }
+  .site-header :global(nav a[aria-current="page"]) { color: var(--accent); font-weight: 600; }
+
+  .lang { font-size: var(--fs-sm); padding: var(--space-2) var(--space-3); border: 1px solid var(--border); border-radius: 999px; text-decoration: none; color: var(--text); min-height: 44px; display: inline-flex; align-items: center; }
+
+  .menu { display: none; }
+  .menu summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; font-size: var(--fs-sm); padding: 0 var(--space-3); border: 1px solid var(--border); border-radius: 999px; list-style: none; }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu nav { position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); border-bottom: 1px solid var(--border); padding: var(--space-2) var(--gutter) var(--space-4); }
+  .menu :global(ul) { flex-direction: column; }
+  .menu :global(nav a) { padding: var(--space-3) var(--space-2); font-size: var(--fs-base); }
+
+  @media (max-width: 960px) {
+    .nav-desktop { display: none; }
+    .menu { display: block; order: 2; }
+  }
+  @media (max-width: 480px) {
+    .brand-sub { display: none; }
+  }
+
+  .site-footer { border-top: 1px solid var(--border); background: var(--bg-subtle); padding: var(--space-8) 0; font-size: var(--fs-sm); }
+  .foot { display: grid; gap: var(--space-3); }
+  .links { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-4); margin: 0; padding: 0; }
+  .copyright { font-size: 0.8rem; }
+</style>

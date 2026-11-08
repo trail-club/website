@@ -1,0 +1,20 @@
+---
+import { render } from "astro:content";
+import type { DocEntry } from "../lib/content";
+import { t, type Lang } from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+  entry: DocEntry;
+  fallback: boolean;
+}
+const { lang, entry, fallback } = Astro.props;
+const { Content } = await render(entry);
+---
+
+{fallback && <p class="notice">{t(lang, "doc.fallback")}</p>}
+{entry.data.draft && <p class="notice">{t(lang, "doc.draft")}</p>}
+<h1>{entry.data.title}</h1>
+{entry.data.description && <p class="lead">{entry.data.description}</p>}
+{entry.data.repo && <p><a href={entry.data.repo}>{t(lang, "doc.repo")} →</a></p>}
+<div class="prose"><Content /></div>

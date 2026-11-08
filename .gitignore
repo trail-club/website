@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+design/logo/export/
+design/logo/scripts/.build.jsx

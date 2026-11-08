@@ -1,0 +1,116 @@
+---
+import Base from "../layouts/Base.astro";
+import Figure from "../components/Figure.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { getNews, getSite, showPlaceholders, youtubeEmbed } from "../lib/content";
+import { localePath, pick, t, type Lang } from "../lib/i18n";
+import { PAGES } from "../lib/pages";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const site = await getSite();
+const news = (await getNews(lang)).slice(0, 5);
+const affiliation = pick(lang, site, "affiliation");
+const tagline = pick(lang, site, "tagline");
+// While placeholders are on, show the missing team photo as a box instead of falling back.
+const heroImage = site.team_photo ?? (showPlaceholders ? undefined : site.robot_photo);
+const heroCaption = site.team_photo ? pick(lang, site, "team_photo_caption") : undefined;
+
+const cards = PAGES.filter((p) => "card" in p);
+const dateFmt = new Intl.DateTimeFormat(lang === "ja" ? "ja-JP" : "en-US", { dateStyle: "medium", timeZone: "Asia/Tokyo" });
+---
+
+<Base lang={lang}>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <p class="eyebrow">{site.league}</p>
+        <h1>{site.team_name}</h1>
+        {affiliation && (site.affiliation_url ? <p class="aff"><a href={site.affiliation_url}>{affiliation}</a></p> : <p class="aff">{affiliation}</p>)}
+        {!affiliation && <Placeholder req="affiliation" variant="inline" />}
+        {tagline && <p class="lead">{tagline}</p>}
+        {!tagline && <Placeholder req="tagline" variant="inline" />}
+        <p class="robot">Robot: <a href={localePath(lang, "/robot")}>{site.robot_name}</a></p>
+      </div>
+      {
+        heroImage ? (
+          <Figure crop src={heroImage} alt={site.team_photo ? t(lang, "home.teamPhoto") : site.robot_name} caption={heroCaption} year={site.team_photo_year} />
+        ) : (
+          <Placeholder req="teamPhoto" variant="media" />
+        )
+      }
+    </div>
+  </section>
+
+  <div class="container page">
+    {
+      (site.qualification_video || showPlaceholders) && (
+        <section>
+          <h2 class="first">{t(lang, "home.video")}</h2>
+          {site.qualification_video ? (
+            <div class="video">
+              <iframe src={youtubeEmbed(site.qualification_video)} title={t(lang, "home.video")} loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen />
+            </div>
+          ) : (
+            <Placeholder req="video" variant="media" />
+          )}
+        </section>
+      )
+    }
+
+    <section>
+      <h2 class={site.qualification_video || showPlaceholders ? undefined : "first"}>{t(lang, "home.explore")}</h2>
+      <div class="grid">
+        {cards.map((c) => (
+          <a class="card" href={localePath(lang, c.path)}>
+            <h3>{t(lang, c.key)}</h3>
+            <p>{t(lang, c.card)}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {
+      news.length > 0 && (
+        <section>
+          <h2>{t(lang, "home.news")}</h2>
+          <ul class="news">
+            {news.map((n) => (
+              <li>
+                <time datetime={n.data.date.toISOString()}>{dateFmt.format(n.data.date)}</time>
+                <span>{n.data.title}{n.data.draft && <span class="badge warn">draft</span>}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    {
+      news.length === 0 && showPlaceholders && (
+        <section>
+          <h2>{t(lang, "home.news")}</h2>
+          <Placeholder req="news" edit={`src/content/news/${lang}/YYYY-MM-DD-slug.md（_template.md をコピー）`} />
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .hero { background: var(--bg-subtle); border-bottom: 1px solid var(--border); }
+  .hero-inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-8); align-items: center; padding-top: var(--space-12); padding-bottom: var(--space-12); }
+  .eyebrow { margin: 0 0 var(--space-2); font-size: var(--fs-sm); font-weight: 600; color: var(--accent); }
+  .hero h1 { font-size: var(--fs-3xl); letter-spacing: 0.02em; margin-bottom: var(--space-2); }
+  .aff { margin: 0 0 var(--space-4); font-weight: 600; }
+  .robot { margin: var(--space-4) 0 0; font-size: var(--fs-sm); color: var(--text-muted); }
+  h2.first { margin-top: 0; }
+  section + section { margin-top: var(--space-12); }
+  section + section h2 { margin-top: 0; }
+  .news { list-style: none; margin: 0; padding: 0; }
+  .news li { display: flex; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--border); }
+  .news time { color: var(--text-muted); font-size: var(--fs-sm); white-space: nowrap; font-variant-numeric: tabular-nums; padding-top: 0.15em; }
+  @media (max-width: 760px) {
+    .hero-inner { grid-template-columns: minmax(0, 1fr); padding-top: var(--space-8); padding-bottom: var(--space-8); }
+    .news li { flex-direction: column; gap: 0; }
+  }
+</style>

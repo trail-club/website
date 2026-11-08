@@ -1,0 +1,31 @@
+name: Check
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      strict:
+        description: "Fail on qualification items that are not filled in"
+        type: boolean
+        default: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      # Set the repository variable STRICT_CONTENT=true before the qualification deadline.
+      - name: Content check
+        run: node scripts/check-content.mjs --online ${{ (inputs.strict || vars.STRICT_CONTENT == 'true') && '--strict' || '' }}
+      - run: npm run build
+      - name: Link check
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --root-dir "${{ github.workspace }}/dist" --no-progress --exclude-loopback "dist/**/*.html"
+          fail: true

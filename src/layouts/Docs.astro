@@ -1,0 +1,60 @@
+---
+import Base from "./Base.astro";
+import { listDocs } from "../lib/content";
+import { localePath, t, type Lang } from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+  section: "research" | "software";
+  title: string;
+  description?: string;
+  /** slug of the page being shown ("" for the section top) */
+  active: string;
+}
+
+const { lang, section, title, description, active } = Astro.props;
+const docs = await listDocs(lang, section);
+const base = `/${section}`;
+const heading = t(lang, section === "research" ? "research.title" : "sw.title");
+---
+
+<Base lang={lang} title={title} description={description}>
+  <div class="container page layout">
+    <aside class="side" aria-label={heading}>
+      <a class="side-title" href={localePath(lang, base)} aria-current={active === "" ? "page" : undefined}>{heading}</a>
+      {
+        docs.length > 0 && (
+          <ul>
+            {docs
+              .filter((d) => d.slug !== "index")
+              .map((d) => (
+                <li>
+                  <a href={localePath(lang, `${base}/${d.slug}`)} aria-current={active === d.slug ? "page" : undefined}>
+                    {d.entry.data.title}
+                    {d.entry.data.draft && <span class="badge warn">draft</span>}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        )
+      }
+    </aside>
+    <article class="content">
+      <slot />
+    </article>
+  </div>
+</Base>
+
+<style>
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--space-12); align-items: start; }
+  .side { position: sticky; top: 80px; font-size: var(--fs-sm); }
+  .side-title { display: block; font-weight: 700; color: var(--text); text-decoration: none; margin-bottom: var(--space-2); padding: var(--space-2); }
+  .side ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--border); }
+  .side li a { display: flex; gap: var(--space-2); align-items: center; padding: var(--space-2) var(--space-3); color: var(--text-muted); text-decoration: none; margin-left: -1px; border-left: 2px solid transparent; }
+  .side li a:hover { color: var(--text); }
+  .side a[aria-current="page"] { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+    .side { position: static; border-bottom: 1px solid var(--border); padding-bottom: var(--space-4); }
+  }
+</style>

@@ -1,0 +1,13 @@
+---
+import Docs from "../layouts/Docs.astro";
+import DocBody from "../components/DocBody.astro";
+import type { DocEntry } from "../lib/content";
+import type { Lang } from "../lib/i18n";
+
+interface Props { lang: Lang; section: "research" | "software"; slug: string; entry: DocEntry; fallback: boolean }
+const { lang, section, slug, entry, fallback } = Astro.props;
+---
+
+<Docs lang={lang} section={section} title={entry.data.title} description={entry.data.description} active={slug}>
+  <DocBody lang={lang} entry={entry} fallback={fallback} />
+</Docs>
