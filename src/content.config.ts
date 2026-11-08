@@ -38,6 +38,8 @@ const site = defineCollection({
     og_image: optText,
     // YouTube video id of the qualification video (the part after v=)
     qualification_video: optText,
+    // true = ask search engines not to list the site (while it is unfinished)
+    noindex: z.boolean().default(false),
   }),
 });
 

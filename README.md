@@ -93,6 +93,12 @@ design/logo/scripts/run.sh
 PR では `.github/workflows/check.yml` が内容チェック、build、リンク切れチェックを行う。
 締切前はリポジトリの変数 `STRICT_CONTENT` を `true` にすると、未記入の項目があれば PR が失敗する。
 
+### 検索エンジンに載せない（未完成の間）
+
+`src/data/site.yaml` の `noindex: true` の間は、全ページに `<meta name="robots" content="noindex, nofollow">` が入り、Google などの検索結果に出ない（URL を知っている人と審査員は普通に見られる）。
+内容が揃ったら `noindex: false` にする。`npm run check:content` は `true` のままだと未入力として知らせる。
+`robots.txt` でクロールを禁止しないこと。禁止すると検索エンジンが noindex を読めず、URL だけ検索結果に載ることがある。
+
 ### 初回だけ必要な設定
 
 1. GitHub: リポジトリの Settings → Pages → Source を **GitHub Actions** にする。

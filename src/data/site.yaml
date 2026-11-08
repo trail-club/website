@@ -3,6 +3,8 @@
 # Leave a value empty ("") until it is decided; empty items are not shown.
 - id: main
   team_name: TRAIL Club
+  # 検索エンジンに載せない（未完成の間）。内容が揃ったら false にする。
+  noindex: true
   league: RoboCup@Home Open Platform League (OPL)
   robot_name: AhaRobot
   affiliation: ""            # TODO: university / lab (English)

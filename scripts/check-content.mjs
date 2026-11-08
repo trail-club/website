@@ -40,6 +40,8 @@ for (const key of SITE_FILE_KEYS) {
   if (site[key] && !publicFile(site[key])) errors.push(`site.yaml: ${key} points to a missing file: public${site[key]}`);
 }
 
+if (site.noindex) missing.push("site.yaml: noindex — search engines are blocked; set to false when the site is ready");
+
 // --- members (S-W1) ---
 const members = mdFiles("src/content/members").map((f) => ({ file: f, ...frontmatter(f) }));
 const withRole = (r) => members.filter((m) => (m.roles ?? ["member"]).includes(r));
